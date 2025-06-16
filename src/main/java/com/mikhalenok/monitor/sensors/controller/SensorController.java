@@ -8,6 +8,8 @@ import com.mikhalenok.monitor.sensors.dto.sensor.SensorSearchRq;
 import com.mikhalenok.monitor.sensors.dto.sensor.SensorSearchRs;
 import com.mikhalenok.monitor.sensors.dto.view.Views;
 import com.mikhalenok.monitor.sensors.service.SensorService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,22 +21,26 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/sensors")
+@Tag(name = "Sensors", description = "Manage sensors")
 public class SensorController {
     private final SensorService sensorService;
 
     @GetMapping
     @JsonView(Views.Public.class)
+    @Operation(summary = "Get all sensors", description = "Returns a list of sensors")
     public List<SensorRs> getSensors() {
         return sensorService.getSensors();
     }
 
     @GetMapping("/admin")
     @JsonView(Views.Admin.class)
+    @Operation(summary = "Get sensors for admin", description = "Returns sensors with admin privileges")
     public List<SensorRs> getSensorsForAdmin() {
         return sensorService.getSensors();
     }
 
     @GetMapping("/search")
+    @Operation(summary = "Search sensors", description = "Filter sensors by name, model and pagination")
     public List<SensorSearchRs> searchSensors(@RequestParam(value = "page", defaultValue = "0") int page,
                                               @RequestParam(value = "limit", defaultValue = "50") int limit,
                                               @RequestBody @Valid SensorSearchRq sensorSearchRq) {
@@ -42,22 +48,26 @@ public class SensorController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Get a sensor by ID", description = "Returns a sensor based on its ID")
     public SensorRs getSensor(@PathVariable Long id) {
         return sensorService.getSensor(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Create a new sensor", description = "Saves a new sensor and returns its ID")
     public Long saveSensor(@RequestBody @Valid SensorRq sensor) {
         return sensorService.saveSensor(sensor);
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Update sensor", description = "Updates an existing sensor based on its ID")
     public SensorRs updateSensor(@PathVariable Long id, @RequestBody @Valid SensorRq sensor) {
         return sensorService.updateSensor(id, sensor);
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete sensor", description = "Deletes a sensor based on its ID")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUnit(@PathVariable Long id) {
         sensorService.deleteSensor(id);
