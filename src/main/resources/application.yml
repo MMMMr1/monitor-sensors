@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: monitor-sensors
+  datasource:
+    url: jdbc:postgresql://localhost:5432/monitor_sensor
+    username: postgres
+    password: pass
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
