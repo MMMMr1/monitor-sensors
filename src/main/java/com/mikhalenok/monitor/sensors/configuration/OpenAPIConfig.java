@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @OpenAPIDefinition(
         info = @Info(
-                title = "Sensor API",
+                title = "Monitor sensor API",
                 version = "1.0",
                 description = "API for managing sensors"
         )
