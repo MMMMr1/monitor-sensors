@@ -1,15 +1,15 @@
 package com.mikhalenok.monitor.sensors.service;
 
-import com.mikhalenok.monitor.sensors.dto.sensor.SensorRq;
-import com.mikhalenok.monitor.sensors.dto.sensor.SensorRs;
-import com.mikhalenok.monitor.sensors.dto.sensor.SensorSearchRq;
-import com.mikhalenok.monitor.sensors.dto.sensor.SensorSearchRs;
-import com.mikhalenok.monitor.sensors.exception.NotFoundException;
-import com.mikhalenok.monitor.sensors.mapper.SensorMapper;
-import com.mikhalenok.monitor.sensors.model.Sensor;
-import com.mikhalenok.monitor.sensors.repository.SensorRepository;
-import com.mikhalenok.monitor.sensors.repository.UnitRepository;
-import com.mikhalenok.monitor.sensors.repository.spec.SensorSpecification;
+import com.mikhalenok.monitor.sensors.presentation.model.sensor.SensorRq;
+import com.mikhalenok.monitor.sensors.presentation.model.sensor.SensorRs;
+import com.mikhalenok.monitor.sensors.presentation.model.sensor.SensorSearchRq;
+import com.mikhalenok.monitor.sensors.presentation.model.sensor.SensorSearchRs;
+import com.mikhalenok.monitor.sensors.infrastructure.exception.NotFoundException;
+import com.mikhalenok.monitor.sensors.service.mapper.SensorMapper;
+import com.mikhalenok.monitor.sensors.data.Sensor;
+import com.mikhalenok.monitor.sensors.data.repository.SensorRepository;
+import com.mikhalenok.monitor.sensors.data.repository.UnitRepository;
+import com.mikhalenok.monitor.sensors.data.repository.spec.SensorSpecification;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;

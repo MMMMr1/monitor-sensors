@@ -1,11 +1,11 @@
 package com.mikhalenok.monitor.sensors.service;
 
-import com.mikhalenok.monitor.sensors.dto.sensortype.SensorTypeRs;
-import com.mikhalenok.monitor.sensors.dto.sensortype.SensorTypeRq;
-import com.mikhalenok.monitor.sensors.exception.NotFoundException;
-import com.mikhalenok.monitor.sensors.mapper.SensorTypeMapper;
-import com.mikhalenok.monitor.sensors.model.SensorType;
-import com.mikhalenok.monitor.sensors.repository.SensorTypeRepository;
+import com.mikhalenok.monitor.sensors.presentation.model.sensortype.SensorTypeRs;
+import com.mikhalenok.monitor.sensors.presentation.model.sensortype.SensorTypeRq;
+import com.mikhalenok.monitor.sensors.infrastructure.exception.NotFoundException;
+import com.mikhalenok.monitor.sensors.service.mapper.SensorTypeMapper;
+import com.mikhalenok.monitor.sensors.data.SensorType;
+import com.mikhalenok.monitor.sensors.data.repository.SensorTypeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

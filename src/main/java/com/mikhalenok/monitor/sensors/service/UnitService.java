@@ -1,11 +1,11 @@
 package com.mikhalenok.monitor.sensors.service;
 
-import com.mikhalenok.monitor.sensors.dto.unit.UnitRs;
-import com.mikhalenok.monitor.sensors.dto.unit.UnitRq;
-import com.mikhalenok.monitor.sensors.exception.NotFoundException;
-import com.mikhalenok.monitor.sensors.mapper.UnitMapper;
-import com.mikhalenok.monitor.sensors.model.Unit;
-import com.mikhalenok.monitor.sensors.repository.UnitRepository;
+import com.mikhalenok.monitor.sensors.presentation.model.unit.UnitRs;
+import com.mikhalenok.monitor.sensors.presentation.model.unit.UnitRq;
+import com.mikhalenok.monitor.sensors.infrastructure.exception.NotFoundException;
+import com.mikhalenok.monitor.sensors.service.mapper.UnitMapper;
+import com.mikhalenok.monitor.sensors.data.Unit;
+import com.mikhalenok.monitor.sensors.data.repository.UnitRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -42,7 +42,6 @@ public class UnitService {
                 .map(unitRepository::save)
                 .map(unitMapper::toUnitDto)
                 .orElseThrow(throwNotFoundException(id));
-
     }
 
     public void deleteUnit(Long id) {

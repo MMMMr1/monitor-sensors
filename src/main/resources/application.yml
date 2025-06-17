@@ -2,7 +2,7 @@ spring:
   application:
     name: monitor-sensors
   datasource:
-    url: jdbc:postgresql://localhost:5432/monitor_sensor
+    url: jdbc:postgresql://database-monitor:5432/postgres
     username: postgres
     password: pass
   jpa:
@@ -13,3 +13,8 @@ spring:
       hibernate:
         format_sql: true
     open-in-view: false
+
+jwt:
+  issuer: SpringSecurityExample
+  secret-key: FSmFQ0tNPt79eHKSiuaxu0Kwtie6El27XyVCPwTvlFU
+  expiry-time-in-seconds: 86400
