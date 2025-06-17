@@ -4,9 +4,12 @@ import com.mikhalenok.monitor.sensors.data.Authority;
 import com.mikhalenok.monitor.sensors.data.User;
 import com.mikhalenok.monitor.sensors.data.repository.AuthorityRepository;
 import com.mikhalenok.monitor.sensors.data.repository.UserRepository;
-import com.mikhalenok.monitor.sensors.infrastructure.TokenProvider;
+import com.mikhalenok.monitor.sensors.infrastructure.exception.LoginException;
+import com.mikhalenok.monitor.sensors.infrastructure.exception.UserAlreadyExistsException;
+import com.mikhalenok.monitor.sensors.infrastructure.security.JwtService;
 import com.mikhalenok.monitor.sensors.presentation.model.auth.RegistrationRq;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -18,6 +21,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class UserService {
@@ -30,14 +34,14 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final TokenProvider tokenProvider;
+    private final JwtService jwtService;
 
     private final AuthenticationManager authenticationManager;
 
     public void registerUser(RegistrationRq registrationRq) {
 
         if (userRepository.existsByUsername(registrationRq.username())) {
-            throw new RuntimeException("User already exists!");
+            throw new UserAlreadyExistsException("User already exists");
         }
         User user = new User();
         user.setPassword(registrationRq.password());
@@ -53,10 +57,10 @@ public class UserService {
         try {
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
-            return tokenProvider.createToken(authentication);
+            return jwtService.generateJwt(authentication);
         } catch (AuthenticationException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Invalid username or password");
+            log.error("Unsuccessful authentication: {}", e.getMessage());
+            throw new LoginException("Invalid username or password");
         }
     }
 

@@ -1,4 +1,4 @@
-package com.mikhalenok.monitor.sensors.infrastructure;
+package com.mikhalenok.monitor.sensors.infrastructure.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -21,7 +21,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class TokenProvider {
+public class JwtService {
 
     @Value("${jwt.secret-key}")
     private String secret;
@@ -33,7 +33,7 @@ public class TokenProvider {
     private Long expirationTime;
 
 
-    public String createToken(Authentication authentication) {
+    public String generateJwt(Authentication authentication) {
         String username = authentication.getName();
         return Jwts.
                 builder()

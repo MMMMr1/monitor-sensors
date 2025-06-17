@@ -1,5 +1,6 @@
 package com.mikhalenok.monitor.sensors.service;
 
+import com.mikhalenok.monitor.sensors.data.repository.SensorTypeRepository;
 import com.mikhalenok.monitor.sensors.presentation.model.sensor.SensorRq;
 import com.mikhalenok.monitor.sensors.presentation.model.sensor.SensorRs;
 import com.mikhalenok.monitor.sensors.presentation.model.sensor.SensorSearchRq;
@@ -10,6 +11,7 @@ import com.mikhalenok.monitor.sensors.data.Sensor;
 import com.mikhalenok.monitor.sensors.data.repository.SensorRepository;
 import com.mikhalenok.monitor.sensors.data.repository.UnitRepository;
 import com.mikhalenok.monitor.sensors.data.repository.spec.SensorSpecification;
+import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -21,15 +23,19 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
 
+import static java.util.Objects.nonNull;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class SensorService {
     private final SensorRepository sensorRepository;
     private final UnitRepository unitRepository;
+    private final SensorTypeRepository sensorTypeRepository;
     private final SensorMapper sensorMapper;
 
     public Long saveSensor(SensorRq sensorRq) {
+        validateSensorRq(sensorRq);
         Sensor sensor = sensorMapper.toSensor(sensorRq);
         if (Objects.isNull(sensorRq.unit())) {
             sensor.setUnit(null);
@@ -51,6 +57,7 @@ public class SensorService {
     }
 
     public SensorRs updateSensor(Long id, SensorRq sensorRq) {
+        validateSensorRq(sensorRq);
         return sensorRepository.findById(id)
                 .map(sensor -> {
                     sensor.setName(sensorRq.name());
@@ -58,7 +65,7 @@ public class SensorService {
                     sensor.setRangeFrom(sensorRq.range().from());
                     sensor.setRangeTo(sensorRq.range().to());
                     sensor.getType().setId(sensorRq.type());
-                    if (sensorRq.unit() != null) {
+                    if (nonNull(sensorRq.unit())) {
                         sensor.setUnit(unitRepository.findById(sensorRq.unit())
                                 .orElseThrow(() -> new NotFoundException("Unit with id %s does not exist.".formatted(sensorRq.unit()))));
                     }
@@ -93,5 +100,17 @@ public class SensorService {
 
     private Supplier<NotFoundException> throwNotFoundException(Long id) {
         return () -> new NotFoundException("Sensor with id %s does not exist.".formatted(id));
+    }
+
+    private void validateSensorRq(SensorRq sensorRq) {
+
+        if (!sensorTypeRepository.existsById(sensorRq.type())) {
+            throw new ValidationException("Type with id %s does not exist.".formatted(sensorRq.type()));
+        }
+        if (nonNull(sensorRq.unit())) {
+            if (!unitRepository.existsById(sensorRq.unit())) {
+                throw new ValidationException("Unit with id %s does not exist.".formatted(sensorRq.unit()));
+            }
+        }
     }
 }

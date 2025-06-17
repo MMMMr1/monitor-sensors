@@ -1,4 +1,4 @@
-package com.mikhalenok.monitor.sensors.infrastructure;
+package com.mikhalenok.monitor.sensors.infrastructure.openapi;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;

@@ -1,4 +1,4 @@
-package com.mikhalenok.monitor.sensors.infrastructure;
+package com.mikhalenok.monitor.sensors.infrastructure.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -19,14 +19,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String BEARER_PREFIX = "Bearer ";
 
-    private final TokenProvider tokenProvider;
+    private final JwtService jwtService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         String token = extractBearerToken(request);
-        if (token != null && tokenProvider.validateToken(token)) {
-            Authentication authentication = tokenProvider.setAuthentication(token);
+        if (token != null && jwtService.validateToken(token)) {
+            Authentication authentication = jwtService.setAuthentication(token);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);
